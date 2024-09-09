@@ -15,7 +15,7 @@ export const ProductList: React.FC = () => {
             <h3 className="font-bold">{product.name}</h3>
             <p>${product.price.toFixed(2)}</p>
             <button
-              onClick={() => addToCart(product)}
+              onClick={() => addToCart({ ...product, quantity: 1 })}
               className="mt-2 bg-blue-500 text-white px-4 py-2 rounded"
             >
               Add to Cart

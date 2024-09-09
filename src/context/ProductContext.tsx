@@ -16,6 +16,8 @@ export const ProductProvider: React.FC<React.PropsWithChildren> = ({ children })
       factory.createProduct(1, 'Product 1', 10),
       factory.createProduct(2, 'Product 2', 15),
       factory.createProduct(3, 'Product 3', 20),
+      factory.createProduct(4, 'Product 4', 210),
+      factory.createProduct(5, 'Product 5', 30),
     ];
   });
 
