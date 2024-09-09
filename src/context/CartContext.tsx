@@ -1,51 +1,23 @@
 
-import React, { createContext, useContext, useReducer } from 'react';
+import React, { createContext, PropsWithChildren, useContext, useReducer } from 'react';
 import { CartItem } from '../types';
 
-interface CartContextType {
+export type ICartDataProvider = {
   cart: CartItem[];
   addToCart: (item: CartItem) => void;
   removeFromCart: (id: number) => void;
-}
-
-const CartContext = createContext<CartContextType | undefined>(undefined);
-
-type CartAction =
-  | { type: 'ADD_TO_CART'; payload: CartItem }
-  | { type: 'REMOVE_FROM_CART'; payload: number };
-
-const cartReducer = (state: CartItem[], action: CartAction): CartItem[] => {
-  switch (action.type) {
-    case 'ADD_TO_CART':
-      const existingItem = state.find(item => item.id === action.payload.id);
-      if (existingItem) {
-        return state.map(item =>
-          item.id === action.payload.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      }
-      return [...state, { ...action.payload, quantity: 1 }];
-    case 'REMOVE_FROM_CART':
-      return state.filter(item => item.id !== action.payload);
-    default:
-      return state;
-  }
 };
 
-export const CartProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const [cart, dispatch] = useReducer(cartReducer, []);
+type CartDataProviderProps = PropsWithChildren<{
+  provider: ICartDataProvider;
+}>;
 
-  const addToCart = (item: CartItem) => {
-    dispatch({ type: 'ADD_TO_CART', payload: item });
-  };
+const CartContext = createContext<CartDataProviderProps | undefined>(undefined);
 
-  const removeFromCart = (id: number) => {
-    dispatch({ type: 'REMOVE_FROM_CART', payload: id });
-  };
+export const CartProvider: React.FC<CartDataProviderProps> = ({ children, provider }) => {
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart }}>
+    <CartContext.Provider value={{ provider }}>
       {children}
     </CartContext.Provider>
   );
@@ -56,5 +28,5 @@ export const useCart = () => {
   if (!context) {
     throw new Error('useCart must be used within a CartProvider');
   }
-  return context;
+  return context.provider;
 };
