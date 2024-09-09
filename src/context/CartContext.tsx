@@ -1,5 +1,5 @@
 
-import React, { createContext, PropsWithChildren, useContext, useReducer } from 'react';
+import React, { createContext, PropsWithChildren, useContext } from 'react';
 import { CartItem } from '../types';
 
 export type ICartDataProvider = {

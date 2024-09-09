@@ -4,12 +4,14 @@ import { Cart } from './components/Cart';
 import { ProductProvider } from './context/ProductContext';
 import { CartProvider } from './context/CartContext';
 import { useCartDataProvider } from './context/CartDataProvider';
+import { useProductDataProvider } from './context/ProductDataProvider';
 
 const App: React.FC = () => {
   const cartDataProvider = useCartDataProvider();
+  const productDataProvider = useProductDataProvider();
 
   return (
-    <ProductProvider>
+    <ProductProvider provider={productDataProvider}>
       <CartProvider provider={cartDataProvider}>
         <div className="container mx-auto p-4">
           <h1 className="text-3xl font-bold mb-4">Shopping App</h1>
