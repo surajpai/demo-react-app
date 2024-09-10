@@ -1,28 +1,25 @@
 import { CartItem } from "@/types";
 import { ICartDataProvider } from "./CartContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { CartSingleton } from "../patterns/CartSingleton";
 
 export function useCartDataProvider(): ICartDataProvider {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
+    const cart = CartSingleton.getInstance();
+
+    useEffect(() => {
+        setCartItems(cart.getItems())
+    }, [])
 
     return {
         cart: cartItems,
         addToCart: (item: CartItem) => {
-            const existingItem = cartItems.find(cartItem => cartItem.id === item.id);
-            if (existingItem) {
-                const updatedItems = cartItems.map(c => {
-                    if (c.id === item.id) {
-                        return { ...item, quantity: c.quantity + 1 }
-                    } else return c;
-                });
-
-                setCartItems(updatedItems);
-            } else {
-                setCartItems([...cartItems, item])
-            }
+            cart.addItem(item);
+            setCartItems([...cart.getItems()]);
         },
         removeFromCart: (itemId: number) => {
-            setCartItems(prevItems => prevItems.filter(item => item.id !== itemId));
+            cart.removeItem(itemId);
+            setCartItems(cart.getItems());
         },
     };
 }
