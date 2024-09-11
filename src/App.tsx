@@ -23,6 +23,10 @@ const App: React.FC = () => {
   const userProvider = useUserDataProvider();
   const [lastOrder, setLastOrder] = useState<{ orderNumber: string; orderedItems: CartItem[] } | null>(null);
 
+  const handleUpdateOrder = (orderNumber: string, orderedItems: CartItem[]) => {
+    setLastOrder({ orderNumber, orderedItems });
+  };
+
   return (
     <ProductProvider provider={productProvider}>
       <CartProvider provider={cartProvider}>
@@ -45,10 +49,14 @@ const App: React.FC = () => {
                       />
                     }
                   />
-                  {/* <Route 
+                  <Route 
                     path="/edit-order" 
-                    element={<EditOrder onUpdateOrder={handleUpdateOrder} />} 
-                  /> */}
+                    element={<EditOrder
+                      onUpdateOrder={handleUpdateOrder}
+                      orderedItems={lastOrder?.orderedItems || []}
+                      orderNumber={lastOrder?.orderNumber || ''}
+                    />}
+                  />
                 </Routes>
                 <Cart />
               </div>

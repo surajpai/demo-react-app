@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { CartItem, User } from '../types';
+import { CartItem } from '../types';
+import { useUser } from '../context/UserContext';
 
 interface EditOrderProps {
     orderedItems: CartItem[];
-    user: User;
     orderNumber: string;
-    onUpdateOrder: (updatedItems: CartItem[]) => void;
+    onUpdateOrder: (orderNumber: string, updatedItems: CartItem[]) => void;
 }
 
-export const EditOrder: React.FC<EditOrderProps> = ({ orderedItems, user, orderNumber, onUpdateOrder }) => {
+export const EditOrder: React.FC<EditOrderProps> = ({ orderedItems, orderNumber, onUpdateOrder }) => {
     const [items, setItems] = useState<CartItem[]>(orderedItems);
     const navigate = useNavigate();
+    const { user } = useUser();
 
     const updateQuantity = (id: number, newQuantity: number) => {
         if (newQuantity < 1) return;
@@ -23,7 +24,7 @@ export const EditOrder: React.FC<EditOrderProps> = ({ orderedItems, user, orderN
     };
 
     const handleSubmit = () => {
-        onUpdateOrder(items);
+        onUpdateOrder(orderNumber, items);
         navigate('/order-confirmation', { state: { user, orderNumber, orderedItems: items } });
     };
 
