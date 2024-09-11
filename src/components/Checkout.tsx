@@ -1,20 +1,19 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useUser } from '../context/UserContext';
-import { User } from '../types';
-import { OrderConfirmation } from './OrderConfirmation';
+import { useOrder } from '../context/OrderContext';
 
 export const Checkout: React.FC = () => {
     const { cart, clearCart } = useCart();
     const { setUser } = useUser();
+    const { setOrder } = useOrder();
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         address: '',
     });
-    const [orderPlaced, setOrderPlaced] = useState(false);
-    const [orderNumber, setOrderNumber] = useState('');
-    const [orderedItems, setOrderedItems] = useState(cart);
 
     const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
@@ -26,15 +25,14 @@ export const Checkout: React.FC = () => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (validateForm()) {
-            const user: User = {
-            id: Date.now(),
-            ...formData,
+            const user = {
+                id: Date.now(),
+                ...formData,
             };
             setUser(user);
-            const generatedOrderNumber = `ORD-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
-            setOrderNumber(generatedOrderNumber);
-            setOrderedItems([...cart]);
-            setOrderPlaced(true);
+            const orderNumber = `ORD-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+            setOrder({ orderNumber, orderedItems: cart });
+            navigate('/order-confirmation');
             clearCart();
         }
     };
@@ -54,10 +52,6 @@ export const Checkout: React.FC = () => {
         }
         return true;
     };
-
-    if (orderPlaced) {
-        return <OrderConfirmation orderNumber={orderNumber} orderedItems={orderedItems} />;
-    }
 
     return (
         <div className="w-full md:w-2/3">

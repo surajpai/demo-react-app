@@ -11,57 +11,40 @@ import { Header } from './components/Header';
 import { ProductProvider } from './context/ProductContext';
 import { CartProvider } from './context/CartContext';
 import { UserProvider } from './context/UserContext';
+import { OrderProvider } from './context/OrderContext';
 import { useProductDataProvider } from './context/ProductDataProvider';
 import { useCartDataProvider } from './context/CartDataProvider';
 import { useUserDataProvider } from './context/UserDataProvider';
-import { useState } from 'react';
-import { CartItem } from './types';
+import { useOrderDataProvider } from './context/OrderDataProvider';
 
 const App: React.FC = () => {
   const productProvider = useProductDataProvider();
   const cartProvider = useCartDataProvider();
   const userProvider = useUserDataProvider();
-  const [lastOrder, setLastOrder] = useState<{ orderNumber: string; orderedItems: CartItem[] } | null>(null);
-
-  const handleUpdateOrder = (orderNumber: string, orderedItems: CartItem[]) => {
-    setLastOrder({ orderNumber, orderedItems });
-  };
+  const orderProvider = useOrderDataProvider();
 
   return (
     <ProductProvider provider={productProvider}>
       <CartProvider provider={cartProvider}>
         <UserProvider provider={userProvider}>
-          <Router>
-            <div className="container mx-auto p-4">
-              <Header />
-              <div className="flex flex-col md:flex-row">
-                <Routes>
-                  <Route path="/" element={<ProductList />} />
-                  <Route path="/product/:id" element={<ProductDetails />} />
-                  <Route path="/category/:category" element={<Category />} />
-                  <Route path="/checkout" element={<Checkout />} />
-                  <Route
-                    path="/order-confirmation"
-                    element={
-                      <OrderConfirmation
-                        orderNumber={lastOrder?.orderNumber || ''}
-                        orderedItems={lastOrder?.orderedItems || []}
-                      />
-                    }
-                  />
-                  <Route 
-                    path="/edit-order" 
-                    element={<EditOrder
-                      onUpdateOrder={handleUpdateOrder}
-                      orderedItems={lastOrder?.orderedItems || []}
-                      orderNumber={lastOrder?.orderNumber || ''}
-                    />}
-                  />
-                </Routes>
-                <Cart />
+          <OrderProvider provider={orderProvider}>
+            <Router>
+              <div className="container mx-auto p-4">
+                <Header />
+                <div className="flex flex-col md:flex-row">
+                  <Routes>
+                    <Route path="/" element={<ProductList />} />
+                    <Route path="/product/:id" element={<ProductDetails />} />
+                    <Route path="/category/:category" element={<Category />} />
+                    <Route path="/checkout" element={<Checkout />} />
+                    <Route path="/order-confirmation" element={<OrderConfirmation />} />
+                    <Route path="/edit-order" element={<EditOrder />} />
+                  </Routes>
+                  <Cart />
+                </div>
               </div>
-            </div>
-          </Router>
+            </Router>
+          </OrderProvider>
         </UserProvider>
       </CartProvider>
     </ProductProvider>

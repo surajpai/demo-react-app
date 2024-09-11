@@ -1,25 +1,22 @@
 import React from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { CartItem } from '../types';
+import { Link, useNavigate } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
+import { useOrder } from '../context/OrderContext';
 
-interface OrderConfirmationProps {
-    orderNumber: string;
-    orderedItems: CartItem[];
-}
-
-export const OrderConfirmation: React.FC<OrderConfirmationProps> = ({ orderNumber, orderedItems }) => {
-    const location = useLocation();
+export const OrderConfirmation: React.FC = () => {
     const navigate = useNavigate();
     const { user } = useUser();
-    const total = orderedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const { order } = useOrder();
 
-    if (!user) {
-        return <div>No user information available.</div>;
+    if (!user || !order) {
+        return <div>No order information available.</div>;
     }
 
+    const { orderNumber, orderedItems } = order;
+    const total = orderedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
     const handleEditOrder = () => {
-        navigate('/edit-order', { state: { orderNumber, orderedItems } });
+        navigate('/edit-order');
     };
 
     return (

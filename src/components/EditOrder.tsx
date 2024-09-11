@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { CartItem } from '../types';
 import { useUser } from '../context/UserContext';
+import { useOrder } from '../context/OrderContext';
 
-interface EditOrderProps {
-    orderedItems: CartItem[];
-    orderNumber: string;
-    onUpdateOrder: (orderNumber: string, updatedItems: CartItem[]) => void;
-}
-
-export const EditOrder: React.FC<EditOrderProps> = ({ orderedItems, orderNumber, onUpdateOrder }) => {
-    const [items, setItems] = useState<CartItem[]>(orderedItems);
+export const EditOrder: React.FC = () => {
     const navigate = useNavigate();
     const { user } = useUser();
+    const { order, updateOrderItems } = useOrder();
+
+    if (!user || !order) {
+        return <div>No order information available.</div>;
+    }
+
+    const [items, setItems] = useState(order.orderedItems);
 
     const updateQuantity = (id: number, newQuantity: number) => {
         if (newQuantity < 1) return;
@@ -24,8 +24,8 @@ export const EditOrder: React.FC<EditOrderProps> = ({ orderedItems, orderNumber,
     };
 
     const handleSubmit = () => {
-        onUpdateOrder(orderNumber, items);
-        navigate('/order-confirmation', { state: { user, orderNumber, orderedItems: items } });
+        updateOrderItems(items);
+        navigate('/order-confirmation');
     };
 
     const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -34,7 +34,7 @@ export const EditOrder: React.FC<EditOrderProps> = ({ orderedItems, orderNumber,
         <div className="w-full max-w-2xl mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
             <h2 className="text-3xl font-bold text-blue-600 mb-6">Edit Order</h2>
             <div className="mb-6">
-                <p className="text-gray-600">Order Number: <span className="font-bold">{orderNumber}</span></p>
+                <p className="text-gray-600">Order Number: <span className="font-bold">{order.orderNumber}</span></p>
             </div>
             <div className="space-y-4">
                 {items.map((item) => (
