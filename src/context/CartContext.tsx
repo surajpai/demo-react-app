@@ -7,6 +7,7 @@ export type ICartDataProvider = {
   addToCart: (item: CartItem) => void;
   removeFromCart: (id: number) => void;
   clearCart: () => void;
+  getTotalItems: () => number;
 };
 
 type CartDataProviderProps = PropsWithChildren<{

@@ -33,4 +33,8 @@ export class CartSingleton {
   public clearCart(): void {
     this.items = [];
   }
+
+  public getUniqueItemCount(): number {
+    return new Set(this.items.map(item => item.id)).size;
+  }
 }
