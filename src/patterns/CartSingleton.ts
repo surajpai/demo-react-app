@@ -34,7 +34,7 @@ export class CartSingleton {
     this.items = [];
   }
 
-  public getUniqueItemCount(): number {
-    return new Set(this.items.map(item => item.id)).size;
+  public getItemCount(): number {
+    return this.items.reduce((acc, item) => acc + item.quantity, 0);
   }
 }

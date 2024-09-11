@@ -26,7 +26,7 @@ export function useCartDataProvider(): ICartDataProvider {
             setCartItems([]);
         },
         getTotalItems: () => {
-            return cart.getUniqueItemCount();
+            return cart.getItemCount();
         },
     };
 }

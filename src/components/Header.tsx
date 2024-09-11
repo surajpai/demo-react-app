@@ -10,7 +10,7 @@ export const Header: React.FC = () => {
     return (
         <header className="bg-gray-800 text-white mb-4">
             <nav className="container mx-auto px-4 py-2 flex items-center">
-                <Link to="/" className="text-xl font-bold mr-6">Simple Shopping App</Link>
+                <Link to="/" className="text-xl font-bold mr-6">Shopping App</Link>
                 <ul className="flex space-x-4 flex-grow">
                     {categories.map(category => (
                         <li key={category}>
