@@ -1,4 +1,3 @@
-
 import { CartItem } from '../types';
 
 export class CartSingleton {

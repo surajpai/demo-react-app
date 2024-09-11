@@ -2,15 +2,18 @@ import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { useUser } from '../context/UserContext';
 import { User } from '../types';
+import { OrderConfirmation } from './OrderConfirmation';
 
 export const Checkout: React.FC = () => {
-    const { cart } = useCart();
+    const { cart, clearCart } = useCart();
     const { setUser } = useUser();
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         address: '',
     });
+    const [orderPlaced, setOrderPlaced] = useState(false);
+    const [orderNumber, setOrderNumber] = useState('');
 
     const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
@@ -21,13 +24,38 @@ export const Checkout: React.FC = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+      if (validateForm()) {
         const user: User = {
             id: Date.now(),
             ...formData,
         };
         setUser(user);
-        alert('Order placed successfully!');
+            const generatedOrderNumber = `ORD-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+            setOrderNumber(generatedOrderNumber);
+            setOrderPlaced(true);
+            clearCart();
+        }
     };
+
+    const validateForm = () => {
+        if (!formData.name.trim()) {
+            alert('Please enter your name');
+            return false;
+        }
+        if (!formData.email.trim() || !formData.email.includes('@')) {
+            alert('Please enter a valid email address');
+            return false;
+        }
+        if (!formData.address.trim()) {
+            alert('Please enter your address');
+            return false;
+        }
+        return true;
+    };
+
+    if (orderPlaced) {
+        return <OrderConfirmation user={formData as User} orderNumber={orderNumber} />;
+    }
 
     return (
         <div className="w-full md:w-2/3">

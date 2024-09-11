@@ -21,6 +21,10 @@ export function useCartDataProvider(): ICartDataProvider {
             cart.removeItem(itemId);
             setCartItems(cart.getItems());
         },
+        clearCart: () => {
+            cart.clearCart();
+            setCartItems([]);
+        }
     };
 }
 
