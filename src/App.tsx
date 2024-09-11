@@ -4,6 +4,7 @@ import { ProductList } from './components/ProductList';
 import { ProductDetails } from './components/ProductDetails';
 import { Cart } from './components/Cart';
 import { Checkout } from './components/Checkout';
+import { Category } from './components/Category';
 import { Header } from './components/Header';
 import { ProductProvider } from './context/ProductContext';
 import { CartProvider } from './context/CartContext';
@@ -28,6 +29,7 @@ const App: React.FC = () => {
                 <Routes>
                   <Route path="/" element={<ProductList />} />
                   <Route path="/product/:id" element={<ProductDetails />} />
+                  <Route path="/category/:category" element={<Category />} />
                   <Route path="/checkout" element={<Checkout />} />
                 </Routes>
                 <Cart />
