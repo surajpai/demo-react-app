@@ -12,5 +12,10 @@ export function useUserDataProvider(): IUserDataProvider {
         setUserState(newUser);
     };
 
-    return { user, setUser };
+    const clearUser = () => {
+        userSingleton.clearUser();
+        setUserState(null);
+    };
+
+    return { user, setUser, clearUser };
 }

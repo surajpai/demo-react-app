@@ -4,6 +4,7 @@ import { User } from '../types';
 export type IUserDataProvider = {
     user: User | null;
     setUser: (user: User) => void;
+    clearUser: () => void;
 };
 
 type UserProviderProps = PropsWithChildren<{

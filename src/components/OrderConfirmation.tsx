@@ -1,15 +1,26 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { User, CartItem } from '../types';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { CartItem } from '../types';
+import { useUser } from '../context/UserContext';
 
 interface OrderConfirmationProps {
-    user: User;
     orderNumber: string;
     orderedItems: CartItem[];
 }
 
-export const OrderConfirmation: React.FC<OrderConfirmationProps> = ({ user, orderNumber, orderedItems }) => {
+export const OrderConfirmation: React.FC<OrderConfirmationProps> = ({ orderNumber, orderedItems }) => {
+    const location = useLocation();
+    const navigate = useNavigate();
+    const { user } = useUser();
     const total = orderedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+    if (!user) {
+        return <div>No user information available.</div>;
+    }
+
+    const handleEditOrder = () => {
+        navigate('/edit-order', { state: { orderNumber, orderedItems } });
+    };
 
     return (
         <div className="w-full max-w-2xl mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
@@ -50,6 +61,9 @@ export const OrderConfirmation: React.FC<OrderConfirmationProps> = ({ user, orde
                   </div>
               </div>
           </div>
+            <button onClick={handleEditOrder} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors mb-4">
+                Edit Order
+            </button>
           <div className="mb-6">
               <h3 className="text-lg font-semibold mb-2">What's Next?</h3>
               <ol className="list-decimal list-inside">
@@ -58,7 +72,7 @@ export const OrderConfirmation: React.FC<OrderConfirmationProps> = ({ user, orde
                   <li>You can track your order status using the order number provided above.</li>
               </ol>
           </div>
-          <Link to="/" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">
+            <Link to="/" className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors">
               Continue Shopping
           </Link>
       </div>

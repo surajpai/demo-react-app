@@ -56,7 +56,7 @@ export const Checkout: React.FC = () => {
     };
 
     if (orderPlaced) {
-        return <OrderConfirmation user={formData as User} orderNumber={orderNumber} orderedItems={orderedItems} />;
+        return <OrderConfirmation orderNumber={orderNumber} orderedItems={orderedItems} />;
     }
 
     return (
