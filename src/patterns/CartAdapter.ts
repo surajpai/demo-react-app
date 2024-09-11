@@ -5,6 +5,7 @@ export class CartAdapter {
     return {
       ...product,
       quantity,
+      image: product.images[0],
     };
   }
 }

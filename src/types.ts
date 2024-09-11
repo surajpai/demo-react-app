@@ -9,9 +9,11 @@ export interface Product {
 
 export interface CartItem extends Product {
   quantity: number;
+  image: string;
 }
 
 export interface User {
+  id: number;
   name: string;
   email: string;
   address: string;

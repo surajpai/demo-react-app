@@ -14,6 +14,7 @@ export const Checkout: React.FC = () => {
     });
     const [orderPlaced, setOrderPlaced] = useState(false);
     const [orderNumber, setOrderNumber] = useState('');
+    const [orderedItems, setOrderedItems] = useState(cart);
 
     const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
@@ -24,14 +25,15 @@ export const Checkout: React.FC = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-      if (validateForm()) {
-        const user: User = {
+        if (validateForm()) {
+            const user: User = {
             id: Date.now(),
             ...formData,
-        };
-        setUser(user);
+            };
+            setUser(user);
             const generatedOrderNumber = `ORD-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
             setOrderNumber(generatedOrderNumber);
+            setOrderedItems([...cart]);
             setOrderPlaced(true);
             clearCart();
         }
@@ -54,7 +56,7 @@ export const Checkout: React.FC = () => {
     };
 
     if (orderPlaced) {
-        return <OrderConfirmation user={formData as User} orderNumber={orderNumber} />;
+        return <OrderConfirmation user={formData as User} orderNumber={orderNumber} orderedItems={orderedItems} />;
     }
 
     return (
