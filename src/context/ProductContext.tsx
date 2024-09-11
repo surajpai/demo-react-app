@@ -4,6 +4,7 @@ import { Product } from '../types';
 
 export type IProductDataProvider = {
   products: Product[];
+  categories: string[];
 }
 
 type ProductProviderProps = PropsWithChildren<{

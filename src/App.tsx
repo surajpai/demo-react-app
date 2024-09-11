@@ -3,30 +3,38 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { ProductList } from './components/ProductList';
 import { ProductDetails } from './components/ProductDetails';
 import { Cart } from './components/Cart';
+import { Checkout } from './components/Checkout';
+import { Header } from './components/Header';
 import { ProductProvider } from './context/ProductContext';
 import { CartProvider } from './context/CartContext';
+import { UserProvider } from './context/UserContext';
 import { useProductDataProvider } from './context/ProductDataProvider';
 import { useCartDataProvider } from './context/CartDataProvider';
+import { useUserDataProvider } from './context/UserDataProvider';
 
 const App: React.FC = () => {
   const productProvider = useProductDataProvider();
   const cartProvider = useCartDataProvider();
+  const userProvider = useUserDataProvider();
 
   return (
     <ProductProvider provider={productProvider}>
       <CartProvider provider={cartProvider}>
-        <Router>
-          <div className="container mx-auto p-4">
-            <h1 className="text-3xl font-bold mb-4">Simple Shopping App</h1>
-            <div className="flex flex-col md:flex-row">
-              <Routes>
-                <Route path="/" element={<ProductList />} />
-                <Route path="/product/:id" element={<ProductDetails />} />
-              </Routes>
-              <Cart />
+        <UserProvider provider={userProvider}>
+          <Router>
+            <div className="container mx-auto p-4">
+              <Header />
+              <div className="flex flex-col md:flex-row">
+                <Routes>
+                  <Route path="/" element={<ProductList />} />
+                  <Route path="/product/:id" element={<ProductDetails />} />
+                  <Route path="/checkout" element={<Checkout />} />
+                </Routes>
+                <Cart />
+              </div>
             </div>
-          </div>
-        </Router>
+          </Router>
+        </UserProvider>
       </CartProvider>
     </ProductProvider>
   );

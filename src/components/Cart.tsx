@@ -1,5 +1,6 @@
 import React from 'react';
 import { useCart } from '../context/CartContext';
+import { Link } from 'react-router-dom';
 
 export const Cart: React.FC = () => {
   const { cart, removeFromCart } = useCart();
@@ -28,9 +29,9 @@ export const Cart: React.FC = () => {
           <div className="mt-4 font-bold">
             Total: ${total.toFixed(2)}
           </div>
-          <button className="mt-4 bg-green-500 text-white px-4 py-2 rounded w-full">
-            Checkout
-          </button>
+            <Link to="/checkout" className="mt-4 bg-green-500 text-white px-4 py-2 rounded w-full block text-center">
+              Proceed to Checkout
+            </Link>
         </>
       )}
     </div>
